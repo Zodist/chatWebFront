@@ -27,14 +27,26 @@ export default {
       msgDatas: state => state.socket.msgDatas,
     }),
   },
-  created() {
+  mounted() {
     const $ths = this;
-    this.$socket.on('chat', (data) => {
-      this.pushMsgData(data);
-      $ths.datas.push(data);
+    this.$connect().then(()=> {
+      this.$socket.on('chat', (data) => {
+        this.pushMsgData(data);
+        $ths.datas.push(data);
+      });
+
     });
   },
+  created() {
+  },
+  destroyed() {
+    this.setUserId("");
+    this.$socket.disconnect();
+  },
   methods: {
+    ...mapMutations({
+      setUserId: "setUserId",
+    }),
     ...mapMutations({
       pushMsgData: Constant.PUSH_MSG_DATA,
     }),

@@ -1,7 +1,7 @@
 <template>
   <v-list v-auto-bottom="msgs">
-    <transition-group name="list" >
-      <div v-for="(msg) in msgs" :key="msg.msg">
+    <!-- <transition-group name="list" > -->
+      <div v-for="(msg, idx) in msgs" :key="idx">
         <v-list-item>
           <v-list-item-action>
             <span>{{msg.from.name}}</span>
@@ -12,7 +12,7 @@
         </v-list-item>
         <v-divider inset></v-divider>
       </div>
-    </transition-group>
+    <!-- </transition-group> -->
   </v-list>
 </template>
 

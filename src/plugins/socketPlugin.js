@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import io from 'socket.io-client';
 
-//const socket = io('http://localhost:3001');
-const socket = io('http://ec2-3-84-249-206.compute-1.amazonaws.com:3001');
+var socket;
+const socketURL = 'http://ec2-3-84-249-206.compute-1.amazonaws.com:3001'; // PROD
+// const socketURL = 'http://localhost:3001'; // PROD
 
 const SocketPlugin = {
   install(vue) {
@@ -15,6 +16,12 @@ const SocketPlugin = {
         name: $payload.name,
       });
     };
+
+    vue.prototype.$connect = () => {
+      socket = io(socketURL);
+      vue.prototype.$socket = socket;
+      return Promise.resolve();
+    }
 
     // 인스턴스 메소드 추가
     vue.prototype.$socket = socket;

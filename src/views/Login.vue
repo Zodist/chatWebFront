@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     joinSubmit(userName) {
-      this.$router.push(`/char-room/${userName}`);
+      this.$router.push(`/chat-room/${userName}`);
     },
   },
 };
