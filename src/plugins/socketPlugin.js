@@ -2,8 +2,8 @@ import Vue from 'vue';
 import io from 'socket.io-client';
 
 var socket;
-const socketURL = 'http://ec2-3-84-249-206.compute-1.amazonaws.com:3001'; // PROD
-// const socketURL = 'http://localhost:3001'; // PROD
+// const socketURL = 'http://ec2-3-84-249-206.compute-1.amazonaws.com:3001'; // PROD
+const socketURL = 'http://localhost:3001'; // PROD
 
 const SocketPlugin = {
   install(vue) {

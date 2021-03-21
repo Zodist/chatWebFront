@@ -1,7 +1,26 @@
 <template>
   <div class="inner-wrap" fluid fill-height inner-wrap>
+    <div>
+      <v-toolbar dark>
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <v-toolbar-title>Title</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon>
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon>mdi-heart</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </v-toolbar>
+    </div>
     <Message-List :msgs="msgDatas" class="msg-list"></Message-List>
-    <Message-From v-on:submitMessage="sendMessage" class="msg-form" ></Message-From>
+    <Message-From
+      v-on:submitMessage="sendMessage"
+      class="msg-form"
+    ></Message-From>
   </div>
 </template>
 
@@ -26,27 +45,28 @@ export default {
     ...mapState({
       msgDatas: state => state.socket.msgDatas,
     }),
+    userId () {
+      return this.$store.getters.getUserId
+    }
   },
   mounted() {
+  },
+  created() {
     const $ths = this;
     this.$connect().then(()=> {
       this.$socket.on('chat', (data) => {
         this.pushMsgData(data);
         $ths.datas.push(data);
       });
-
+      this.$socket.on('personCnt', (data) => {
+        this.$store.commit("setUserCnt", data);
+      });
     });
   },
-  created() {
-  },
   destroyed() {
-    this.setUserId("");
     this.$socket.disconnect();
   },
   methods: {
-    ...mapMutations({
-      setUserId: "setUserId",
-    }),
     ...mapMutations({
       pushMsgData: Constant.PUSH_MSG_DATA,
     }),
@@ -58,7 +78,7 @@ export default {
         msg,
       });
       this.$sendMessage({
-        name: this.$route.params.username,
+        name: this.userId,
         msg,
       });
     },
