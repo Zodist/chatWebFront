@@ -11,7 +11,6 @@
 <script>
 import MessageList from "@/components/Chat/MessageList.vue";
 import MessageForm from "@/components/Chat/MessageForm.vue";
-// import Constant from "@/Constant";
 
 export default {
   name: "ChatRoom",
@@ -34,25 +33,11 @@ export default {
   },
   mounted() {},
   created() {
-    // const $ths = this;
-    // this.$connect().then(()=> {
-    //   this.$socket.on('chat', (data) => {
-    //     this.pushMsgData(data);
-    //     $ths.datas.push(data);
-    //   });
-    //   this.$socket.on('personCnt', (data) => {
-    //     this.$store.commit("setUserCnt", data);
-    //   });
-    //   this.$socket.on('rooms', (data) => {
-    //     console.log("rooms : ", data)
-    //   });
-    // });
     this.$socket.emit("join", {
       roomName: this.$route.params.roomName,
     });
   },
   destroyed() {
-    // this.$socket.disconnect();
   },
   methods: {
     sendMessage(msg) {

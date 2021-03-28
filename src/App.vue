@@ -54,13 +54,6 @@
             <v-list-item-title>Account</v-list-item-title>
           </v-list-item>
 
-          <!-- <v-list-item @click="moveTo('ChatRoom')">
-            <v-list-item-icon>
-              <v-icon>mdi-chat</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Chat</v-list-item-title>
-          </v-list-item> -->
-
           <v-list-item @click="moveTo('ChatRoomList')">
             <v-list-item-icon>
               <v-icon>mdi-chat</v-icon>
@@ -186,6 +179,7 @@ export default {
           });
           this.$router.push({ name: "Home" });
           this.snackbar = true;
+          this.$socket.disconnect();
         })
         .catch((err) => {
           console.log(err);
@@ -206,6 +200,9 @@ export default {
 </script>
 
 <style>
+/* .v-application--wrap {
+  min-height: -webkit-fill-available !important;
+} */
 /* 애니메이션 진입 및 진출은 다른 지속 시간 및  */
 /* 타이밍 기능을 사용할 수 있습니다. */
 .fade-enter-active,
