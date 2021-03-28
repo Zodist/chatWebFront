@@ -1,21 +1,5 @@
 <template>
   <div class="inner-wrap" fluid fill-height inner-wrap>
-    <div>
-      <v-toolbar dark>
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
-        <v-toolbar-title>Title</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
-      </v-toolbar>
-    </div>
     <Message-List :msgs="msgDatas" class="msg-list"></Message-List>
     <Message-From
       v-on:submitMessage="sendMessage"
@@ -25,61 +9,71 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
-import MessageList from '@/components/Chat/MessageList.vue';
-import MessageForm from '@/components/Chat/MessageForm.vue';
-import Constant from '@/Constant';
+import MessageList from "@/components/Chat/MessageList.vue";
+import MessageForm from "@/components/Chat/MessageForm.vue";
+// import Constant from "@/Constant";
 
 export default {
-  name: 'ChatRoom',
+  name: "ChatRoom",
   data() {
     return {
       datas: [],
     };
   },
   components: {
-    'Message-List': MessageList,
-    'Message-From': MessageForm,
+    "Message-List": MessageList,
+    "Message-From": MessageForm,
   },
   computed: {
-    ...mapState({
-      msgDatas: state => state.socket.msgDatas,
-    }),
-    userId () {
-      return this.$store.getters.getUserId
-    }
+    msgDatas() {
+      return this.$store.getters.getMsgByRoomName(this.$route.params.roomName);
+    },
+    userName() {
+      return this.$store.getters.getUserName;
+    },
   },
-  mounted() {
-  },
+  mounted() {},
   created() {
-    const $ths = this;
-    this.$connect().then(()=> {
-      this.$socket.on('chat', (data) => {
-        this.pushMsgData(data);
-        $ths.datas.push(data);
-      });
-      this.$socket.on('personCnt', (data) => {
-        this.$store.commit("setUserCnt", data);
-      });
+    // const $ths = this;
+    // this.$connect().then(()=> {
+    //   this.$socket.on('chat', (data) => {
+    //     this.pushMsgData(data);
+    //     $ths.datas.push(data);
+    //   });
+    //   this.$socket.on('personCnt', (data) => {
+    //     this.$store.commit("setUserCnt", data);
+    //   });
+    //   this.$socket.on('rooms', (data) => {
+    //     console.log("rooms : ", data)
+    //   });
+    // });
+    this.$socket.emit("join", {
+      roomName: this.$route.params.roomName,
     });
   },
   destroyed() {
-    this.$socket.disconnect();
+    // this.$socket.disconnect();
   },
   methods: {
-    ...mapMutations({
-      pushMsgData: Constant.PUSH_MSG_DATA,
-    }),
     sendMessage(msg) {
-      this.pushMsgData({
+      const date = new Date();
+      const time =
+        date.getHours() +
+        ":" +
+        (date.getMinutes() < 10 ? "0" : "") +
+        date.getMinutes();
+      this.$store.commit("pushMsgData", {
         from: {
-          name: '나',
+          name: "나",
         },
-        msg,
+        msg: [msg],
+        roomName: this.$route.params.roomName,
+        time: time,
       });
       this.$sendMessage({
-        name: this.userId,
+        name: this.userName,
         msg,
+        roomName: this.$route.params.roomName,
       });
     },
   },

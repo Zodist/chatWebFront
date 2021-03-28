@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '../views/Home.vue';
-import AccountInfo from '../views/AccountInfo.vue';
 import LoginPage from '../views/LoginPage.vue';
-import ChatRoom from '../views/ChatRoom.vue';
 import SignUpPage from '../views/SignUpPage';
+import AccountInfo from '../views/AccountInfo.vue';
+import ChatRoom from '../views/ChatRoom.vue';
+import ChatRoomList from '../views/ChatRoomList.vue';
 
 import Store from '../store/index';
 import axios from 'axios'
@@ -26,6 +27,11 @@ const router = new Router({
       component: LoginPage,
     },
     {
+      path: '/SignUp',
+      name: 'SignUp',
+      component: SignUpPage,
+    },
+    {
       path: '/AccountInfo',
       name: 'AccountInfo',
       component: AccountInfo,
@@ -36,9 +42,9 @@ const router = new Router({
       component: ChatRoom,
     },
     {
-      path: '/SignUp',
-      name: 'SignUp',
-      component: SignUpPage,
+      path: '/ChatRoomList',
+      name: 'ChatRoomList',
+      component: ChatRoomList,
     },
   ]
 });
@@ -48,7 +54,8 @@ router.beforeEach((to, from, next) => {
   if (Store.state.userInfo.userInfo.id == ""
     && (
       to.name == "AccountInfo" ||
-      to.name == "ChatRoom"
+      to.name == "ChatRoom" ||
+      to.name == "ChatRoomList"
     )) {
       axios.get("/api/login")
         .then((res) => {
