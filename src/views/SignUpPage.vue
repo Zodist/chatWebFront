@@ -49,6 +49,7 @@ export default {
             this.$http.post("api/signup", { id, password, name }, { "Content-Type": "application-json" })
                 .then((res) => {
                     console.log(res);
+                    this.$router.push({ name: "Login" });
                 })
                 .catch((err) => {
                     console.error(err);
