@@ -14,10 +14,13 @@
 
     <div v-show="inChatRoomList">
       <v-toolbar dark>
-        <v-btn icon @click="dialog = true">
+        <v-btn icon @click="flag_newChatRoom = true">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
+        <v-btn icon @click="flag_availChatRoomList = true">
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
       </v-toolbar>
     </div>
 
@@ -76,56 +79,41 @@
     </v-main>
 
     <!-- 알림 표시 -->
-    <v-snackbar v-model="snackbar" :timeout="timeout">
-      {{ text }}
+    <v-snackbar v-model="snackBarFlag" :timeout="timeout">
+      {{ snackBarText }}
     </v-snackbar>
 
     <!-- dialogue -->
-    <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">New ChatRoom</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  v-model="roomName"
-                  label="Chat Name"
-                  required
-                  v-on:keyup.enter="makeRoom"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Close
-          </v-btn>
-          <v-btn color="blue darken-1" text @click="makeRoom"> Make </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <new-chat-room
+      :dialog="flag_newChatRoom"
+      @close="flag_newChatRoom = false"
+    />
+    <avail-chat-room-list
+      :dialog="flag_availChatRoomList"
+      @close="flag_availChatRoomList = false"
+    />
   </v-app>
 </template>
 
 <script>
+import NewChatRoom from "./views/NewChatRoom.vue";
+import AvailChatRoomList from "./views/AvailChatRoomList.vue";
 export default {
   name: "App",
-  components: {},
+  components: {
+    AvailChatRoomList,
+    NewChatRoom,
+  },
   data() {
     return {
       drawer: null,
       group: null,
-      snackbar: false,
-      timeout: 1500,
-      text: "로그아웃되었습니다.",
-      dialog: false,
-      roomName: "",
       transitionName: "",
+
+      timeout: 1500,
+
+      flag_newChatRoom: false,
+      flag_availChatRoomList: false,
     };
   },
   watch: {
@@ -139,6 +127,20 @@ export default {
     },
   },
   computed: {
+    snackBarFlag: {
+      // getter
+      get: function () {
+        return this.$store.getters.getFlag;
+      },
+      // setter
+      set: function (newValue) {
+        console.log("snackBarFlag", newValue);
+        this.$store.commit("offGlobalAlert");
+      },
+    },
+    snackBarText() {
+      return this.$store.getters.getText;
+    },
     inChatRoom: function () {
       return this.$route.name === "ChatRoom";
     },
@@ -155,10 +157,12 @@ export default {
       );
     },
     userCnt() {
-      if (this.$store.getters.getRooms.length === 0) return 0;
-      return this.$store.getters.getRooms.filter((el) => {
+      if (this.$store.getters.getJoinedRooms.length === 0) return 0;
+      var filteredRooms = this.$store.getters.getJoinedRooms.filter((el) => {
         return el.title === this.$route.params.roomName;
-      })[0].userCnt;
+      });
+      if (filteredRooms.length !== 0) return filteredRooms[0].userCnt;
+      else return 0;
     },
   },
   methods: {
@@ -178,7 +182,9 @@ export default {
             name: "",
           });
           this.$router.push({ name: "Home" });
-          this.snackbar = true;
+
+          this.$store.commit("onGlobalAlert", "로그아웃되었습니다");
+
           this.$socket.disconnect();
         })
         .catch((err) => {
@@ -188,21 +194,17 @@ export default {
     moveTo(pageName) {
       this.$router.push({ name: pageName });
     },
-    makeRoom() {
-      this.$socket.emit("makeRoom", {
-        roomName: this.roomName,
-      });
-      this.roomName = "";
-      this.dialog = false;
-    },
   },
 };
 </script>
 
 <style>
-/* .v-application--wrap {
-  min-height: -webkit-fill-available !important;
-} */
+@media screen and (max-width: 768px) {
+    /* 모바일에 사용될 스트일 시트를 여기에 작성합니다. */
+  .v-application--wrap {
+    min-height: -webkit-fill-available !important;
+  }
+}
 /* 애니메이션 진입 및 진출은 다른 지속 시간 및  */
 /* 타이밍 기능을 사용할 수 있습니다. */
 .fade-enter-active,

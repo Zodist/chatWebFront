@@ -50,27 +50,42 @@ const router = new Router({
 });
 router.beforeEach((to, from, next) => {
   // to and from are both route objects. must call `next`.
-  console.log("=== navigation guard ===");
-  if (Store.state.userInfo.userInfo.id == ""
+  if (Store.state.userInfo.userInfo.id === ""
     && (
-      to.name == "AccountInfo" ||
-      to.name == "ChatRoom" ||
-      to.name == "ChatRoomList"
+      to.name === "AccountInfo" ||
+      to.name === "ChatRoom" ||
+      to.name === "ChatRoomList"
     )) {
-      axios.get("/api/login")
-        .then((res) => {
-            const user = res.data.user;
-            if (user) {
-              Store.commit("setUserId", res.data.user);
-            } else {
-              next("/Login");
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
-    
-    return;
+    axios.get("/api/login")
+      .then((res) => {
+        const user = res.data.user;
+        if (user) {
+          Store.commit("setUserId", res.data.user);
+        } else {
+          console.log("=== navigation guard On ===");
+          next("/Login");
+          return;
+        }
+      }).catch((err) => {
+        console.error(err);
+      });
   }
+
+  if (to.name == "Login") {
+    axios.get("/api/login")
+      .then((res) => {
+        const user = res.data.user;
+        if (user) {
+          console.log("=== navigation guard On ===");
+          Store.commit("setUserId", res.data.user);
+          next("/");
+          return;
+        } 
+      }).catch((err) => {
+        console.error(err);
+      });
+  }
+
   next();
 })
 export default router;

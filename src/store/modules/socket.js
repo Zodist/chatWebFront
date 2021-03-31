@@ -2,35 +2,73 @@ import Constant from '../../Constant';
 
 const state = {
   msgDatas: [],
-  // userCnt: 0,
-  rooms: [],
+  joinedRooms: [],
+  availableRooms: [],
 };
 
 // getters
 const getters = {
-  "getUserCnt": ($state) => {
-    return $state.userCnt;
+  getLastMsgDateByRoomName: ($state) => (roomName) => {
+    var msgs = $state.msgDatas.filter((el) => {
+      return el.roomName === roomName
+    });
+    if (msgs.length === 0) return "";
+
+    var msgObj = msgs[msgs.length - 1];
+    return msgObj.time;
+  },
+  getLastMsgByRoomName: ($state) => (roomName) => {
+    var msgs = $state.msgDatas.filter((el) => {
+      return el.roomName === roomName
+    });
+    if (msgs.length === 0) return "";
+
+    var msgObj = msgs[msgs.length - 1].msg;
+    return msgObj[msgObj.length - 1].content;
+  },
+  getUnReadMsgCntByRoomName: ($state) => (roomName) => {
+    var msgs = $state.msgDatas.filter((el) => {
+      return el.roomName === roomName
+    });
+    var cnt = 0;
+    for (var i = 0; i < msgs.length; i++) {
+      for (var j = 0; j < msgs[i].msg.length; j++) {
+        if (!msgs[i].msg[j].read) {
+          cnt++;
+        }
+      }
+    }
+    return cnt;
   },
   getMsgByRoomName: ($state) => (roomName) => {
     return $state.msgDatas.filter((el) => {
       return el.roomName === roomName
     });
   },
-  getRooms: ($state) => {
-    return $state.rooms;
+  getJoinedRooms: ($state) => {
+    return $state.joinedRooms;
+  },
+  getAvailableRooms: ($state) => {
+    return $state.availableRooms;
   },
 };
 
 // actions
 const actions = {
-  [Constant.PUSH_MSG_DATA]: ({commit}, $payload) => {
+  [Constant.PUSH_MSG_DATA]: ({ commit }, $payload) => {
     commit([Constant.PUSH_MSG_DATA], $payload);
   },
-  // "setUserCnt": ({commit}, id) => {
-  //   commit('setUserCnt', id);
-  // },
-  "setRooms": ({commit}, $payload) => {
-    commit('setRooms', $payload);
+  "setJoinedRooms": ({ commit }, $payload) => {
+    commit('setJoinedRooms', $payload);
+  },
+  "setAvailableRooms": ({ commit }, $payload) => {
+    commit('setAvailableRooms', $payload);
+  },
+  "updateUserCntInRoom": ({ commit }, $payload) => {
+    commit('updateUserCntInRoom', $payload);
+  },
+  "readMsgs": ({ commit }, $payload) => {
+    commit('updateUserCntInRoom', $payload);
   },
 };
 
@@ -40,16 +78,42 @@ const mutations = {
     if ($state.msgDatas.length !== 0 &&
       $state.msgDatas[$state.msgDatas.length - 1].from.name === $payload.from.name &&
       $state.msgDatas[$state.msgDatas.length - 1].time === $payload.time) {
-        $state.msgDatas[$state.msgDatas.length - 1].msg.push($payload.msg[0])
+      $state.msgDatas[$state.msgDatas.length - 1].msg.push({ content: $payload.msg[0], read: false })
     } else {
-      $state.msgDatas.push($payload);
+      var msg = {
+        from: $payload.from,
+        msg: [{
+          content: $payload.msg[0],
+          read: false,
+        }],
+        time: $payload.time,
+        roomName: $payload.roomName,
+      };
+      $state.msgDatas.push(msg);
     }
   },
-  // "setUserCnt": ($state, $payload) => {
-  //   $state.userCnt = $payload;
-  // },
-  "setRooms": ($state, $payload) => {
-    $state.rooms = $payload;
+  "setJoinedRooms": ($state, $payload) => {
+    $state.joinedRooms = $payload;
+  },
+  "setAvailableRooms": ($state, $payload) => {
+    $state.availableRooms = $payload;
+  },
+  "updateUserCntInRoom": ($state, $payload) => {
+    for (var i = 0; i < $state.joinedRooms.length; i++) {
+      if ($state.joinedRooms[i].title === $payload.roomName) {
+        $state.joinedRooms[i].userCnt = $payload.userCnt;
+        break;
+      }
+    }
+  },
+  "readMsgs": ($state, roomName) => {
+    $state.msgDatas.forEach(msg => {
+      if (msg.roomName === roomName) {
+        msg.msg.forEach(element => {
+          element.read = true;
+        });
+      }
+    });
   },
 };
 

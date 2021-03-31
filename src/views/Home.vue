@@ -37,7 +37,7 @@ export default {
   },
   computed: {},
   created() {
-    console.log(navigator);
+    // console.log(navigator);
     this.items.push({
       property: "운영체제",
       value: navigator.platform,
