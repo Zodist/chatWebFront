@@ -23,8 +23,8 @@
 
           <v-list-item
             v-else
-            :key="item.title"
-            @click="enterChatRoom(item.title)"
+            :key="item.roomName"
+            @click="enterChatRoom(item.roomName)"
             style="min-width: 375px"
           >
             <v-list-item-avatar>
@@ -33,7 +33,7 @@
 
             <v-list-item-content>
               <v-list-item-title
-                v-html="item.title + ' (' + item.userCnt + ')'"
+                v-html="item.roomName + ' (' + item.userCnt + ')'"
               ></v-list-item-title>
               <v-list-item-subtitle
                 v-html="item.subtitle"

@@ -76,14 +76,14 @@ const actions = {
 const mutations = {
   [Constant.PUSH_MSG_DATA]: ($state, $payload) => {
     if ($state.msgDatas.length !== 0 &&
-      $state.msgDatas[$state.msgDatas.length - 1].from.name === $payload.from.name &&
+      $state.msgDatas[$state.msgDatas.length - 1].sender === $payload.sender &&
       $state.msgDatas[$state.msgDatas.length - 1].time === $payload.time) {
-      $state.msgDatas[$state.msgDatas.length - 1].msg.push({ content: $payload.msg[0], read: false })
+      $state.msgDatas[$state.msgDatas.length - 1].msg.push({ content: $payload.content[0], read: false })
     } else {
       var msg = {
-        from: $payload.from,
+        sender: $payload.sender,
         msg: [{
-          content: $payload.msg[0],
+          content: $payload.content[0],
           read: false,
         }],
         time: $payload.time,
@@ -100,7 +100,7 @@ const mutations = {
   },
   "updateUserCntInRoom": ($state, $payload) => {
     for (var i = 0; i < $state.joinedRooms.length; i++) {
-      if ($state.joinedRooms[i].title === $payload.roomName) {
+      if ($state.joinedRooms[i].roomName === $payload.roomName) {
         $state.joinedRooms[i].userCnt = $payload.userCnt;
         break;
       }

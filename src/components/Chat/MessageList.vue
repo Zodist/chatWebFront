@@ -6,13 +6,13 @@
         <v-list-item two-line style="align-items: unset">
           <v-list-item-action
             style="align-self: unset; justify-content: unset"
-            v-show="msg.from.name !== '나'"
+            v-show="msg.sender !== userId"
           >
-            <span>{{ msg.from.name }}</span>
+            <span>{{ msg.sender }}</span>
             <v-avatar color="primary" size="56"></v-avatar>
           </v-list-item-action>
           <v-list-item-content
-            :style="msg.from.name === '나' ? 'text-align:right;' : ''"
+            :style="msg.sender === userId ? 'text-align:right;' : ''"
           >
             <v-list-item-title
               v-for="(msg2, idx2) in msg.msg"
@@ -40,6 +40,11 @@
 export default {
   name: "MessageList",
   props: ["msgs"],
+  computed: {
+    userId() {
+      return this.$store.getters.getUserId;
+    },
+  },
   created() {},
   mounted() {
     document.getElementsByClassName(

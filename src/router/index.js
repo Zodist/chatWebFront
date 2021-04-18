@@ -6,6 +6,8 @@ import SignUpPage from '../views/SignUpPage';
 import AccountInfo from '../views/AccountInfo.vue';
 import ChatRoom from '../views/ChatRoom.vue';
 import ChatRoomList from '../views/ChatRoomList.vue';
+import TodoList from '../views/TodoList.vue';
+import CanvasTest from '../views/CanvasTest.vue';
 
 import Store from '../store/index';
 import axios from 'axios'
@@ -45,6 +47,16 @@ const router = new Router({
       path: '/ChatRoomList',
       name: 'ChatRoomList',
       component: ChatRoomList,
+    },
+    {
+      path: '/TodoList',
+      name: 'TodoList',
+      component: TodoList,
+    },
+    {
+      path: '/CanvasTest',
+      name: 'CanvasTest',
+      component: CanvasTest,
     },
   ]
 });

@@ -63,6 +63,20 @@
             </v-list-item-icon>
             <v-list-item-title>Chat</v-list-item-title>
           </v-list-item>
+
+          <v-list-item @click="moveTo('TodoList')">
+            <v-list-item-icon>
+              <v-icon>mdi-chat</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>TodoList</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item @click="moveTo('CanvasTest')">
+            <v-list-item-icon>
+              <v-icon>mdi-chat</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>TodoList</v-list-item-title>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -92,6 +106,31 @@
       :dialog="flag_availChatRoomList"
       @close="flag_availChatRoomList = false"
     />
+
+    <v-dialog
+      v-model="loading"
+      fullscreen
+      hide-overlay
+      persistent
+      overlay-opacity="0.5"
+      overlay-color="#000000"
+      transition="none"
+    >
+      <v-container
+        fluid
+        fill-height
+        style="background-color: rgba(255, 255, 255, 0.5)"
+      >
+        <v-layout justify-center align-center>
+          <v-progress-circular
+            :size="70"
+            :width="7"
+            color="purple"
+            indeterminate
+          ></v-progress-circular>
+        </v-layout>
+      </v-container>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -127,6 +166,9 @@ export default {
     },
   },
   computed: {
+    loading() {
+      return this.$store.getters.getGlobalLoadingFlag;
+    },
     snackBarFlag: {
       // getter
       get: function () {
@@ -199,8 +241,8 @@ export default {
 </script>
 
 <style>
-@media screen and (max-width: 768px) {
-    /* 모바일에 사용될 스트일 시트를 여기에 작성합니다. */
+@media screen and (max-width: 425px) {
+  /* 모바일에 사용될 스트일 시트를 여기에 작성합니다. */
   .v-application--wrap {
     min-height: -webkit-fill-available !important;
   }

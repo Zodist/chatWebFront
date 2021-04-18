@@ -56,23 +56,21 @@ export default {
   destroyed() {},
   methods: {
     sendMessage(msg) {
-      const date = new Date();
-      const time =
-        date.getHours() +
-        ":" +
-        (date.getMinutes() < 10 ? "0" : "") +
-        date.getMinutes();
-      this.$store.commit("pushMsgData", {
-        from: {
-          name: "나",
-        },
-        msg: [msg],
-        roomName: this.$route.params.roomName,
-        time: time,
-      });
+      // const date = new Date();
+      // const time =
+      //   date.getHours() +
+      //   ":" +
+      //   (date.getMinutes() < 10 ? "0" : "") +
+      //   date.getMinutes();
+      // this.$store.commit("pushMsgData", {
+      //   sender: "나",
+      //   content: [msg],
+      //   roomName: this.$route.params.roomName,
+      //   time: time,
+      // });
       this.$sendMessage({
-        name: this.userName,
-        msg,
+        sender: this.userName,
+        content: msg,
         roomName: this.$route.params.roomName,
       });
     },

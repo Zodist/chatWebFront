@@ -16,10 +16,10 @@ const getters = {
 // actions
 const actions = {
   "onGlobalAlert": ({commit}, $payload) => {
-    commit('showGlobalAlert', $payload);
+    commit('onGlobalAlert', $payload);
   },
   "offGlobalAlert": ({commit}) => {
-    commit('showGlobalAlert');
+    commit('offGlobalAlert');
   },
 };
 

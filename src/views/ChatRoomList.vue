@@ -16,8 +16,8 @@
 
         <v-list-item
           v-else
-          :key="item.title"
-          @click="enterChatRoom(item.title)"
+          :key="item.roomName"
+          @click="enterChatRoom(item.roomName)"
           style="min-width: 375px"
         >
           <v-list-item-avatar>
@@ -28,24 +28,24 @@
 
           <v-list-item-content>
             <v-list-item-title
-              v-html="item.title + ' (' + item.userCnt + ')'"
+              v-html="item.roomName + ' (' + item.userCnt + ')'"
             ></v-list-item-title>
             <v-list-item-subtitle>
-              {{ $store.getters.getLastMsgByRoomName(item.title) }}
+              {{ $store.getters.getLastMsgByRoomName(item.roomName) }}
             </v-list-item-subtitle>
           </v-list-item-content>
 
           <v-list-item-action>
             <div style="font-size: small">
-              {{ $store.getters.getLastMsgDateByRoomName(item.title) }}
+              {{ $store.getters.getLastMsgDateByRoomName(item.roomName) }}
             </div>
             <v-list-item-avatar
               color="light-blue lighten-4"
               v-show="
-                $store.getters.getUnReadMsgCntByRoomName(item.title) !== 0
+                $store.getters.getUnReadMsgCntByRoomName(item.roomName) !== 0
               "
             >
-              {{ $store.getters.getUnReadMsgCntByRoomName(item.title) }}
+              {{ $store.getters.getUnReadMsgCntByRoomName(item.roomName) }}
             </v-list-item-avatar>
           </v-list-item-action>
         </v-list-item>
@@ -70,7 +70,11 @@ export default {
     },
   },
   mounted() {},
-  created() {},
+  created() {
+    // this.$connectWS().then(() => {
+    //   console.log("socket connceted");
+    // });
+  },
   destroyed() {},
   methods: {
     enterChatRoom(roomName) {

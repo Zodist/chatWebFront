@@ -3,8 +3,8 @@ import io from 'socket.io-client';
 import Store from '../store/index';
 
 var socket;
-const socketURL = 'http://ec2-3-84-249-206.compute-1.amazonaws.com:3001'; // PROD
-// const socketURL = 'http://localhost:3001'; // PROD
+// const socketURL = 'http://ec2-3-84-249-206.compute-1.amazonaws.com:3001'; // PROD
+const socketURL = 'http://localhost:3001'; // PROD
 
 const SocketPlugin = {
   install(vue) {
@@ -13,8 +13,8 @@ const SocketPlugin = {
 
     vue.prototype.$sendMessage = ($payload) => {
       socket.emit('chat', {
-        msg: $payload.msg,
-        name: $payload.name,
+        sender: $payload.sender,
+        content: $payload.content,
         roomName: $payload.roomName,
       });
     };
@@ -31,7 +31,7 @@ const SocketPlugin = {
         data.forEach((element) => {
           items.push({
             avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-            title: element.roomName,
+            roomName: element.roomName,
             userCnt: element.userCnt,
             subtitle: "", //'<span class="text--primary">Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
           });
@@ -49,7 +49,7 @@ const SocketPlugin = {
         data.forEach((element) => {
           items.push({
             avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-            title: element.roomName,
+            roomName: element.roomName,
             userCnt: element.userCnt,
             subtitle: "", //'<span class="text--primary">Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
           });
