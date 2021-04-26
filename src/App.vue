@@ -75,7 +75,7 @@
             <v-list-item-icon>
               <v-icon>mdi-chat</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>TodoList</v-list-item-title>
+            <v-list-item-title>CanvasTest</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
