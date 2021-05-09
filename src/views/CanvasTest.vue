@@ -1,48 +1,8 @@
 <template>
   <v-layout align-center justify-center>
-    <div class="scene">
-      <div class="carousel">
-        <div class="carousel__cell">1</div>
-        <div class="carousel__cell">2</div>
-        <div class="carousel__cell">3</div>
-        <div class="carousel__cell">4</div>
-        <div class="carousel__cell">5</div>
-        <div class="carousel__cell">6</div>
-        <div class="carousel__cell">7</div>
-        <div class="carousel__cell">8</div>
-        <div class="carousel__cell">9</div>
-        <div class="carousel__cell">10</div>
-        <div class="carousel__cell">11</div>
-        <div class="carousel__cell">12</div>
-        <div class="carousel__cell">13</div>
-        <div class="carousel__cell">14</div>
-        <div class="carousel__cell">15</div>
-      </div>
-    </div>
-
-    <div class="carousel-options">
-      <p>
-        <label>
-          Cells
-          <input class="cells-range" type="range" min="3" max="15" value="9" />
-        </label>
-      </p>
-      <p>
-        <button @click="onPrevious" class="previous-button">Previous</button>
-        <button @click="onNext" class="next-button">Next</button>
-      </p>
-      <p>
-        Orientation:
-        <label>
-          <input type="radio" name="orientation" value="horizontal" checked />
-          horizontal
-        </label>
-        <label>
-          <input type="radio" name="orientation" value="vertical" />
-          vertical
-        </label>
-      </p>
-    </div>
+    <v-row justify="center">
+      <v-img :src="img"> </v-img>
+    </v-row>
   </v-layout>
 </template>
 
@@ -50,213 +10,30 @@
 export default {
   data() {
     return {
-      carousel: null,
-      cells: null,
-      cellCount: null,
-      selectedIndex: null,
-      cellWidth: null,
-      cellHeight: null,
-      isHorizontal: null,
-      rotateFn: null,
-      radius: null,
+      img: null,
     };
   },
   computed: {},
   created() {},
   mounted() {
-    this.carousel = document.getElementsByClassName("carousel")[0];
-    this.cells = document.getElementsByClassName("carousel__cell");
-    this.cellCount; // cellCount set from cells-range input value
-    this.selectedIndex = 0;
-    this.cellWidth = this.carousel.offsetWidth;
-    this.cellHeight = this.carousel.offsetHeight;
-    this.isHorizontal = true;
-    this.rotateFn = this.isHorizontal ? "rotateY" : "rotateX";
-
-    // console.log( cellWidth, cellHeight );
-
-    // var cellsRange = document.getElementsByClassName(".cells-range");
-    // cellsRange.addEventListener("change", this.changeCarousel);
-    // cellsRange.addEventListener("input", this.changeCarousel);
-
-    // var orientationRadios = document.getElementsByClassName(
-    //   'input[name="orientation"]'
-    // );
-    // (function () {
-    //   for (var i = 0; i < orientationRadios.length; i++) {
-    //     var radio = orientationRadios[i];
-    //     radio.addEventListener("change", this.onOrientationChange);
-    //   }
-    // })();
-
-    // set initials
-    this.onOrientationChange();
+    let fileName = "1620022008763-zodist-images.png";
+    this.$http
+      .post(
+        "api/download",
+        { fileName },
+        { "Content-Type": "application-json" }
+      )
+      .then((res) => {
+        console.log(res.data);
+        this.img = res.data;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
-  methods: {
-    onPrevious() {
-      this.selectedIndex--;
-      this.rotateCarousel();
-    },
-    onNext() {
-      const rand_0_9 = Math.floor(Math.random() * 10) + 200;
-      this.selectedIndex += rand_0_9
-      // this.selectedIndex++;
-      this.rotateCarousel();
-    },
-    rotateCarousel() {
-      var angle = this.theta * this.selectedIndex * -1;
-      this.carousel.style.transform = `translateZ(${-this.radius}px) ${
-        this.rotateFn
-      }(${angle}deg)`;
-      console.log(this.carousel.style.transform);
-    },
-    changeCarousel() {
-      this.cellCount = 9; //this.cellsRange.value;
-      this.theta = 360 / this.cellCount;
-      var cellSize = this.isHorizontal ? this.cellWidth : this.cellHeight;
-      this.radius = Math.round(
-        cellSize / 2 / Math.tan(Math.PI / this.cellCount)
-      );
-      for (var i = 0; i < this.cells.length; i++) {
-        var cell = this.cells[i];
-        if (i < this.cellCount) {
-          // visible cell
-          cell.style.opacity = 1;
-          var cellAngle = this.theta * i;
-          cell.style.transform = `${this.rotateFn}(${cellAngle}deg) translateZ(${this.radius}px)`;
-          cell.style.transition = "transform 11330ms ease-in-out;";
-          // this.rotateFn +
-          // "(" +
-          // cellAngle +
-          // "deg) translateZ(" +
-          // this.radius +
-          // "px)";
-        } else {
-          // hidden cell
-          cell.style.opacity = 0;
-          cell.style.transform = "none";
-        }
-      }
-
-      this.rotateCarousel();
-    },
-    onOrientationChange() {
-      // var checkedRadio = document.querySelector(
-      //   'input[name="orientation"]:checked'
-      // );
-      this.isHorizontal = false; //checkedRadio.value == "horizontal";
-      this.rotateFn = this.isHorizontal ? "rotateY" : "rotateX";
-      this.changeCarousel();
-    },
-  },
+  methods: {},
 };
 </script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: sans-serif;
-  text-align: center;
-}
-
-.scene {
-  border: 1px solid #ccc;
-  margin: 40px 0;
-  position: relative;
-  width: 210px;
-  height: 140px;
-  margin: 80px auto;
-  perspective: 1000px;
-}
-
-.carousel {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  transform: translateZ(-288px);
-  transform-style: preserve-3d;
-  transition: transform 1s;
-  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-}
-
-.carousel__cell {
-  position: absolute;
-  width: 190px;
-  height: 120px;
-  left: 10px;
-  top: 10px;
-  border: 2px solid black;
-  line-height: 116px;
-  font-size: 80px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  transition: transform 1s, opacity 1s;
-}
-
-.carousel__cell:nth-child(9n + 1) {
-  background: hsla(0, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 2) {
-  background: hsla(40, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 3) {
-  background: hsla(80, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 4) {
-  background: hsla(120, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 5) {
-  background: hsla(160, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 6) {
-  background: hsla(200, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 7) {
-  background: hsla(240, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 8) {
-  background: hsla(280, 100%, 50%, 0.8);
-}
-.carousel__cell:nth-child(9n + 0) {
-  background: hsla(320, 100%, 50%, 0.8);
-}
-
-.carousel__cell:nth-child(1) {
-  transform: rotateY(0deg) translateZ(288px);
-}
-.carousel__cell:nth-child(2) {
-  transform: rotateY(40deg) translateZ(288px);
-}
-.carousel__cell:nth-child(3) {
-  transform: rotateY(80deg) translateZ(288px);
-}
-.carousel__cell:nth-child(4) {
-  transform: rotateY(120deg) translateZ(288px);
-}
-.carousel__cell:nth-child(5) {
-  transform: rotateY(160deg) translateZ(288px);
-}
-.carousel__cell:nth-child(6) {
-  transform: rotateY(200deg) translateZ(288px);
-}
-.carousel__cell:nth-child(7) {
-  transform: rotateY(240deg) translateZ(288px);
-}
-.carousel__cell:nth-child(8) {
-  transform: rotateY(280deg) translateZ(288px);
-}
-.carousel__cell:nth-child(9) {
-  transform: rotateY(320deg) translateZ(288px);
-}
-
-.carousel-options {
-  text-align: center;
-  position: relative;
-  z-index: 2;
-  background: hsla(0, 0%, 100%, 0.8);
-}
 </style>

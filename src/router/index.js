@@ -9,8 +9,8 @@ import ChatRoomList from '../views/ChatRoomList.vue';
 import TodoList from '../views/TodoList.vue';
 import CanvasTest from '../views/CanvasTest.vue';
 
-import Store from '../store/index';
-import axios from 'axios'
+// import Store from '../store/index';
+// import axios from 'axios'
 
 Vue.use(Router);
 
@@ -50,8 +50,7 @@ const router = new Router({
     },
     {
       path: '/TodoList',
-      name: 'TodoList',
-      component: TodoList,
+       component: TodoList,
     },
     {
       path: '/CanvasTest',
@@ -62,6 +61,7 @@ const router = new Router({
 });
 router.beforeEach((to, from, next) => {
   // to and from are both route objects. must call `next`.
+  /*
   if (Store.state.userInfo.userInfo.id === ""
     && (
       to.name === "AccountInfo" ||
@@ -97,7 +97,7 @@ router.beforeEach((to, from, next) => {
         console.error(err);
       });
   }
-
+  */
   next();
 })
 export default router;

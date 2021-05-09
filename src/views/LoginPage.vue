@@ -54,15 +54,16 @@ export default {
   created() {},
   methods: {
     onSubmit() {
-      const id = this.id;
+      const user_id = this.id;
       const password = this.password;
       this.$http
         .post(
           "api/login",
-          { id, password },
+          { user_id, password },
           { "Content-Type": "application-json" }
         )
         .then((res) => {
+          localStorage.setItem("access_token", "Bearer "+ res.data.token)
           if (res.data.user) {
               this.$store.commit("onGlobalAlert", "로그인되었습니다");
             this.$connectWS().then(() => {

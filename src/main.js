@@ -19,6 +19,7 @@ axios.interceptors.request.use(
   function (config) {
     // 요청을 보내기 전에 수행할 일
     // ...
+    config.headers.Authorization = localStorage.getItem("access_token");
     store.commit('setGlobalIndicator', true);
     return config;
   },
