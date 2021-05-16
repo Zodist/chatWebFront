@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import Constant from "../Constant"
 export default {
     data() {
         return {
@@ -46,7 +47,7 @@ export default {
             const id = this.id;
             const password = this.password;
             const name = this.name;
-            this.$http.post("api/signup", { id, password, name }, { "Content-Type": "application-json" })
+            this.$http.post(Constant.URL_SIGNUP, { id, password, name }, { "Content-Type": "application-json" })
                 .then((res) => {
                     console.log(res);
                     this.$router.push({ name: "Login" });

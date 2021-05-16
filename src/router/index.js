@@ -8,6 +8,8 @@ import ChatRoom from '../views/ChatRoom.vue';
 import ChatRoomList from '../views/ChatRoomList.vue';
 import TodoList from '../views/TodoList.vue';
 import CanvasTest from '../views/CanvasTest.vue';
+import ImageTest from '../views/ImageTest.vue';
+// import Constant from "../Constant"
 
 // import Store from '../store/index';
 // import axios from 'axios'
@@ -50,12 +52,18 @@ const router = new Router({
     },
     {
       path: '/TodoList',
-       component: TodoList,
+      name: 'TodoList',
+      component: TodoList,
     },
     {
       path: '/CanvasTest',
       name: 'CanvasTest',
       component: CanvasTest,
+    },
+    {
+      path: '/ImageTest',
+      name: 'ImageTest',
+      component: ImageTest,
     },
   ]
 });
@@ -68,7 +76,7 @@ router.beforeEach((to, from, next) => {
       to.name === "ChatRoom" ||
       to.name === "ChatRoomList"
     )) {
-    axios.get("/api/login")
+    axios.get(Constant.URL_LOGIN)
       .then((res) => {
         const user = res.data.user;
         if (user) {
@@ -84,7 +92,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.name == "Login") {
-    axios.get("/api/login")
+    axios.get(Constant.URL_LOGIN)
       .then((res) => {
         const user = res.data.user;
         if (user) {

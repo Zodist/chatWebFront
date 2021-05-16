@@ -77,6 +77,13 @@
             </v-list-item-icon>
             <v-list-item-title>CanvasTest</v-list-item-title>
           </v-list-item>
+
+          <v-list-item @click="moveTo('ImageTest')">
+            <v-list-item-icon>
+              <v-icon>mdi-chat</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>ImageTest</v-list-item-title>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -137,6 +144,7 @@
 <script>
 import NewChatRoom from "./views/NewChatRoom.vue";
 import AvailChatRoomList from "./views/AvailChatRoomList.vue";
+import Constant from "./Constant";
 export default {
   name: "App",
   components: {
@@ -215,7 +223,7 @@ export default {
       }
 
       this.$http
-        .get("/api/logout")
+        .get(Constant.URL_LOGOUT)
         .then((res) => {
           console.log(res);
           this.$store.commit("setUserId", {

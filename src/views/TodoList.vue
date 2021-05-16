@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import Constant from "../Constant"
 export default {
   name: "TodoList",
   data() {
@@ -89,7 +90,7 @@ export default {
   destroyed() {},
   methods: {
     getTodoItems() {
-      this.$http.get("/api/todos").then((res) => {
+      this.$http.get(Constant.URL_TODOS).then((res) => {
         this.todoItems = res.data;
       });
     },
@@ -100,7 +101,7 @@ export default {
         completed: !item.completed,
       };
       this.$http
-        .put("/api/todos/todoid/" + item.todoid, param, {
+        .put(Constant.URL_TODOS_TODOID + item.todoid, param, {
           "Content-Type": "application-json",
         })
         .then((res) => {
@@ -115,7 +116,7 @@ export default {
         completed: false,
       };
       this.$http
-        .post("/api/todos", param, {
+        .post(Constant.URL_TODOS, param, {
           "Content-Type": "application-json",
         })
         .then((res) => {

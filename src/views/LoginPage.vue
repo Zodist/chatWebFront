@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import Constant from "../Constant"
 export default {
   data() {
     return {
@@ -58,7 +59,7 @@ export default {
       const password = this.password;
       this.$http
         .post(
-          "api/login",
+          Constant.URL_LOGIN,
           { user_id, password },
           { "Content-Type": "application-json" }
         )
