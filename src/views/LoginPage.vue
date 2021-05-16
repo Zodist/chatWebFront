@@ -55,12 +55,12 @@ export default {
   created() {},
   methods: {
     onSubmit() {
-      const user_id = this.id;
+      const id = this.id;
       const password = this.password;
       this.$http
         .post(
           Constant.URL_LOGIN,
-          { user_id, password },
+          { id, password },
           { "Content-Type": "application-json" }
         )
         .then((res) => {

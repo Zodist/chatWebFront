@@ -8,7 +8,7 @@ export default {
   URL_IMG_UPLOAD: '/api/upload',
   URL_GET_PHOTOLIST: '/api/photolist',
 
-  URL_SIGNUP: '/api/signup',
+  URL_USER: '/api/user',
 
   URL_TODOS: '/api/todos',
   URL_TODOS_TODOID: '/api/todos/todoid/',
