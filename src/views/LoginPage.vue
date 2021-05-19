@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import Constant from "../Constant"
+import Constant from "../Constant";
 export default {
   data() {
     return {
@@ -64,18 +64,18 @@ export default {
           { "Content-Type": "application-json" }
         )
         .then((res) => {
-          localStorage.setItem("access_token", "Bearer "+ res.data.token)
-          if (res.data.user) {
-              this.$store.commit("onGlobalAlert", "로그인되었습니다");
-            this.$connectWS().then(() => {
-              console.log("socket connceted");
-            });
-            this.$store.commit("setUserId", res.data.user);
-            this.$router.push({ name: "Home" });
-          } else if (res.data.message) {
-            this.showAlert = true;
-            this.alertMessage = res.data.message;
-          }
+          localStorage.setItem("access_token", "Bearer " + res.data.token);
+          this.$store.commit("onGlobalAlert", "로그인되었습니다");
+          this.$router.push({ name: "Home" });
+          // if (res.data.user) {
+          //   this.$connectWS().then(() => {
+          //     console.log("socket connceted");
+          //   });
+          //   this.$store.commit("setUserId", res.data.user);
+          // } else if (res.data.message) {
+          //   this.showAlert = true;
+          //   this.alertMessage = res.data.message;
+          // }
         })
         .catch((err) => {
           console.error(err);

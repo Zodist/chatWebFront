@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import Constant from "../Constant"
+import Constant from "../Constant";
 export default {
   name: "TodoList",
   data() {
@@ -90,9 +90,14 @@ export default {
   destroyed() {},
   methods: {
     getTodoItems() {
-      this.$http.get(Constant.URL_TODOS).then((res) => {
-        this.todoItems = res.data;
-      });
+      this.$http
+        .get(Constant.URL_TODOS)
+        .then((res) => {
+          this.todoItems = res.data;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
     setItemDone(item) {
       let param = {
@@ -110,7 +115,6 @@ export default {
         });
     },
     submit() {
-      
       let param = {
         content: this.newTodo,
         completed: false,
@@ -125,7 +129,7 @@ export default {
           console.log(res);
           this.getTodoItems();
         });
-    }
+    },
   },
 };
 </script>

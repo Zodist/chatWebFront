@@ -9,6 +9,9 @@
           <v-icon v-if="existUserId">mdi-logout</v-icon>
           <v-icon v-else>mdi-login</v-icon>
         </v-btn>
+        <v-btn icon @click="logout">
+          <v-icon >mdi-logout</v-icon>
+        </v-btn>
       </v-app-bar>
     </div>
 
@@ -240,6 +243,11 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    logout() {
+      localStorage.removeItem("access_token");
+      this.$router.push({ name: "Home" });
+      this.$store.commit("onGlobalAlert", "로그아웃되었습니다");
     },
     moveTo(pageName) {
       this.$router.push({ name: pageName });
