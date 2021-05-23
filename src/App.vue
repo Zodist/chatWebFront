@@ -5,12 +5,11 @@
         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
         <v-toolbar-title>{{ title }}</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon @click="loginOrLogout">
-          <v-icon v-if="existUserId">mdi-logout</v-icon>
-          <v-icon v-else>mdi-login</v-icon>
+        <v-btn icon v-show="isLogined" @click="moveTo('Login')">
+          <v-icon>mdi-login</v-icon>
         </v-btn>
-        <v-btn icon @click="logout">
-          <v-icon >mdi-logout</v-icon>
+        <v-btn icon v-show="!isLogined" @click="logout">
+          <v-icon>mdi-logout</v-icon>
         </v-btn>
       </v-app-bar>
     </div>
@@ -86,6 +85,13 @@
               <v-icon>mdi-chat</v-icon>
             </v-list-item-icon>
             <v-list-item-title>ImageTest</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item @click="moveTo('UserTest')">
+            <v-list-item-icon>
+              <v-icon>mdi-chat</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>UserTest</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -164,6 +170,8 @@ export default {
 
       flag_newChatRoom: false,
       flag_availChatRoomList: false,
+
+      isLogined: false,
     };
   },
   watch: {
@@ -175,6 +183,20 @@ export default {
         this.transitionName = "slide-left";
       }
     },
+  },
+  mounted() {
+    this.$http
+      .get(
+        Constant.URL_LOGIN,
+        { "Content-Type": "application-json" }
+      )
+      .then((res) => {
+        console.log("check login:",res.data.logined);
+        this.isLogined = res.data.logined
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
   computed: {
     loading() {
@@ -203,12 +225,12 @@ export default {
     title: function () {
       return this.$route.name;
     },
-    existUserId: function () {
-      return (
-        this.$store.state.userInfo.userInfo !== "" &&
-        this.$store.state.userInfo.userInfo.id !== ""
-      );
-    },
+    // existUserId: function () {
+    //   return (
+    //     this.$store.state.userInfo.userInfo !== "" &&
+    //     this.$store.state.userInfo.userInfo.id !== ""
+    //   );
+    // },
     userCnt() {
       if (this.$store.getters.getJoinedRooms.length === 0) return 0;
       var filteredRooms = this.$store.getters.getJoinedRooms.filter((el) => {
@@ -219,31 +241,6 @@ export default {
     },
   },
   methods: {
-    loginOrLogout() {
-      if (!this.existUserId) {
-        this.$router.push({ name: "Login" });
-        return;
-      }
-
-      this.$http
-        .get(Constant.URL_LOGOUT)
-        .then((res) => {
-          console.log(res);
-          this.$store.commit("setUserId", {
-            id: "",
-            password: "",
-            name: "",
-          });
-          this.$router.push({ name: "Home" });
-
-          this.$store.commit("onGlobalAlert", "로그아웃되었습니다");
-
-          this.$socket.disconnect();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     logout() {
       localStorage.removeItem("access_token");
       this.$router.push({ name: "Home" });

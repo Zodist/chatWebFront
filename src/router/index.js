@@ -9,6 +9,7 @@ import ChatRoomList from '../views/ChatRoomList.vue';
 import TodoList from '../views/TodoList.vue';
 import CanvasTest from '../views/CanvasTest.vue';
 import ImageTest from '../views/ImageTest.vue';
+import UserTest from '../views/UserList.vue';
 // import Constant from "../Constant"
 
 // import Store from '../store/index';
@@ -64,6 +65,11 @@ const router = new Router({
       path: '/ImageTest',
       name: 'ImageTest',
       component: ImageTest,
+    },
+    {
+      path: '/UserTest',
+      name: 'UserTest',
+      component: UserTest,
     },
   ]
 });

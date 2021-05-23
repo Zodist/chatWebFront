@@ -9,6 +9,7 @@ export default {
   URL_GET_PHOTOLIST: '/api/photolist',
 
   URL_USER: '/api/user',
+  URL_USERS: '/api/users',
 
   URL_TODOS: '/api/todos',
   URL_TODOS_TODOID: '/api/todos/todoid/',
