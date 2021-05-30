@@ -17,6 +17,8 @@
           ></v-text-field>
         </v-card-title>
         <v-data-table
+          dense
+          :mobile-breakpoint="300"
           :headers="headers"
           :items="countries"
           :search="search"
