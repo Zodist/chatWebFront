@@ -10,6 +10,7 @@ import TodoList from '../views/TodoList.vue';
 import CanvasTest from '../views/CanvasTest.vue';
 import ImageTest from '../views/ImageTest.vue';
 import UserTest from '../views/UserList.vue';
+import Earth2 from '../views/Earth2.vue'
 // import Constant from "../Constant"
 
 // import Store from '../store/index';
@@ -70,6 +71,11 @@ const router = new Router({
       path: '/UserTest',
       name: 'UserTest',
       component: UserTest,
+    },
+    {
+      path: '/Earth2',
+      name: 'Earth2',
+      component: Earth2,
     },
   ]
 });

@@ -93,6 +93,13 @@
             </v-list-item-icon>
             <v-list-item-title>UserTest</v-list-item-title>
           </v-list-item>
+
+          <v-list-item @click="moveTo('Earth2')">
+            <v-list-item-icon>
+              <v-icon>mdi-chat</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Earth2</v-list-item-title>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -186,13 +193,10 @@ export default {
   },
   mounted() {
     this.$http
-      .get(
-        Constant.URL_LOGIN,
-        { "Content-Type": "application-json" }
-      )
+      .get(Constant.URL_LOGIN, { "Content-Type": "application-json" })
       .then((res) => {
-        console.log("check login:",res.data.logined);
-        this.isLogined = res.data.logined
+        console.log("check login:", res.data.logined);
+        this.isLogined = res.data.logined;
       })
       .catch((err) => {
         console.error(err);

@@ -13,4 +13,6 @@ export default {
 
   URL_TODOS: '/api/todos',
   URL_TODOS_TODOID: '/api/todos/todoid/',
+
+  URL_EARTH2: '/api/earth2',
 };
